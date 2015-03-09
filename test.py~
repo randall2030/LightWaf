@@ -1,0 +1,12 @@
+import threading
+import time
+import DataStruture
+
+class WriteThread(threading.Thread):
+	def run(self, data_queue):
+			var = [];
+			
+			
+			
+if __name__ == '__main__':
+	data_queue = DataStruture()
