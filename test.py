@@ -1,47 +1,21 @@
-# -*- coding: utf-8 -*-
-import threading
+import sys
 import time
-import DataStructure
+import logging
+from watchdog.observers import Observer
+from watchdog.events import LoggingEventHandler
 
-class WriteThread(threading.Thread):
-    def __init__(self, data_queue):
-        self.data_queue = data_queue
-        super(WriteThread, self).__init__() 
-    def run(self):
-        n = 100
-        while n != 0:
-            var = []
-            n = n - 1;
-            var.append(n)
-            var.append("get")
-            var.append("127.0.0.1")
-            var.append("www.baidu.com")
-            var.append("password = ASDASDASDSAFFWEFWEFRV")
-            self.data_queue.enqueue(var)
-            print "push Id = %d" %n		
-			
-class readThread(threading.Thread):
-    def __init__(self, n, data_queue):
-        self.data_queue = data_queue
-        self.n = n
-        super(readThread, self).__init__() 
-
-    def run(self):
-        while(1):
-            var = self.data_queue.dequeue()
-            print "\npop id = %d" %var[0] + " by reader %d" %self.n
-
-if __name__ == '__main__':
-    data_queue = DataStructure.DataList()
-    a = WriteThread(data_queue)
-    b = readThread(1, data_queue)
-    c = readThread(2, data_queue)
-    dd = DataStructure.DataDictionary()
-    
-
-    b.start()
-    a.start()
-    c.start()
-    dd.setDictionaryFromFile("WhiteList/WhiteList")
-    print dd.data
-    
+if __name__ == "__main__":
+    logging.basicConfig(level=logging.INFO,
+                        format='%(asctime)s - %(message)s',
+                        datefmt='%Y-%m-%d %H:%M:%S')
+    path = sys.argv[1] if len(sys.argv) > 1 else '.'
+    event_handler = LoggingEventHandler()
+    observer = Observer()
+    observer.schedule(event_handler, path, recursive=True)
+    observer.start()
+    try:
+        while True:
+            time.sleep(1)
+    except KeyboardInterrupt:
+        observer.stop()
+    observer.join()
