@@ -79,11 +79,11 @@ class FileNotifier():
         observer = Observer()
         observer.schedule(event_handler, self.path,recursive=True)
         observer.start()
-        #try:
-        #    while True:
-                
-        #except KeyboardInterrupt:
-        #    observer.stop()
+        try:
+            while True:
+                pass
+        except KeyboardInterrupt:
+            observer.stop()
         #observer.join()
 
     
