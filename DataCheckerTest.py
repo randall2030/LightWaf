@@ -2,6 +2,7 @@ import DataChecker
 import DataStructure
 import DataCollection
 import threading
+import time
 
 class WorkerThread(threading.Thread):
     def __init__(self, t):
@@ -26,7 +27,7 @@ if __name__ == '__main__':
     file_list = DataStructure.DataList()
     alarm_list = DataStructure.DataList()
     sniffer = DataCollection.PackageSniffer('wlan0', 'tcp port 80', package_list)
-    notifier = DataCollection.FileNotifier('/var/www',r'\S+\.php|\S+\.inc|\S+\.php5',file_list)
+    notifier = DataCollection.FileNotifier('/var/www',r'(\S+\.php)|(\S+\.inc)|(\S+\.php5)|(\S+\.jsp)',file_list)
     pack_checker = DataChecker.PackageChecker(package_list, alarm_list)
     file_checker = DataChecker.FileChecker(file_list, alarm_list)
     
@@ -39,7 +40,8 @@ if __name__ == '__main__':
     rt3 = ReadThread(package_list)
   
     rt1.start()
-    sniff_thread.start()
     notify_thread.start()
+    time.sleep(1)
+    sniff_thread.start()
     pack_check_thread.start()
     file_check_thread.start()

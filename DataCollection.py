@@ -20,6 +20,8 @@ class PackageSniffer:
         net, mask = pcap.lookupnet(self.interface)
         sniffer.open_live(self.interface, 1600, 0, 100)
         sniffer.setfilter(self.package_filter, 0, 0)
+        print "Package sniffer ready!"
+
         try:
             while True:
                 temp = sniffer.next()
@@ -31,7 +33,7 @@ class PackageSniffer:
             print '%s' % sys.exc_type
             print 'shutting down'
             print '%d packets received, %d packets dropped, %d packets dropped by interface' % sniffer.stats()
-    
+
 
 class HandlePackageDataThread(threading.Thread):
     def __init__(self, pktlen, data, timestamp, package_data_list):
@@ -79,6 +81,7 @@ class FileNotifier():
         observer = Observer()
         observer.schedule(event_handler, self.path,recursive=True)
         observer.start()
+        print "File notifier ready!"
         #try:
         #    while True:
         #        pass
@@ -90,35 +93,30 @@ class FileNotifier():
 class FileEventHandler(FileSystemEventHandler):
     def __init__(self, suffix, file_data_list):
         self.file_data_list = file_data_list
-        self.pattern = re.compile(suffix)
+        self.pattern = re.compile(suffix, re.I)
         super(FileEventHandler, self).__init__()
 
     def on_modified(self, event):
         (event_type, src_path, is_dir) = event.key
         if not is_dir:
-            if self.pattern.match(src_path):
+            if self.pattern.search(src_path):
                 temp = HandleFileDataThread(event_type, src_path, is_dir, time.strftime('%Y-%m-%d %H:%M:%S'), self.file_data_list)
                 temp.start()
-               
  
     def on_moved(self, event):
         (event_type, src_path, is_dir) = event.key
         if not is_dir:
-            if self.pattern.match(src_path):
+            if self.pattern.search(src_path):
                 temp = HandleFileDataThread(event_type, src_path, is_dir, time.strftime('%Y-%m-%d %H:%M:%S'), self.file_data_list)
                 temp.start()
-
     
     def on_created(self, event):
         (event_type, src_path, is_dir) = event.key
         if not is_dir:
-            if self.pattern.match(src_path):
+            if self.pattern.search(src_path):
                 temp = HandleFileDataThread(event_type, src_path, is_dir, time.strftime('%Y-%m-%d %H:%M:%S'), self.file_data_list)
                 temp.start()
-
     
-    def on_deleted(self, event):
-        (event_type, src_path, is_dir) = event.key
 
 class HandleFileDataThread(threading.Thread):
     def __init__(self, event_type, src_path, is_dir, time, file_data_list):

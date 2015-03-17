@@ -38,6 +38,8 @@ class PackageCheckingThread(threading.Thread):
             checking_data = self.data[3]
         elif "POST" == self.data[1]:
             checking_data = self.data[4]
+        else:
+            checking_data = self.data[4]
         
         while True:
             if self.SQLInjection_regex.search(checking_data):
@@ -66,8 +68,8 @@ class FileChecker():
         self.jsp_regex = re.compile(JSP_shell_feature, re.I)
 
     def work(self):
-        php_suffix_regex = re.compile(r'''\S+\.php|\S+\.inc|\S+\.php5''', re.I)
-        jsp_suffix_regex = re.compile(r'''\.jsp''', re.I)
+        php_suffix_regex = re.compile(r'''(\S+\.php)|(\S+\.inc)|(\S+\.php5)''', re.I)
+        jsp_suffix_regex = re.compile(r'''\S+\.jsp''', re.I)
         while True:
             data = self.data_list.dequeue()
             if php_suffix_regex.search(data[3]):
