@@ -20,7 +20,7 @@ class PackagePatrol:
         net, mask = pcap.lookupnet(self.interface)
         sniffer.open_live(self.interface, 1600, 0, 100)
         sniffer.setfilter(self.package_filter, 0, 0)
-        print "Package Patrol ready!"
+        exec '''print "Package Patrol ready!"'''
 
         try:
             while True:
@@ -81,7 +81,7 @@ class FilePatrol():
         observer = Observer()
         observer.schedule(event_handler, self.path,recursive=True)
         observer.start()
-        print "File patrol ready!"
+        exec '''print "File patrol ready!"'''
         #try:
         #    while True:
         #        pass
@@ -143,5 +143,5 @@ if __name__ == '__main__':
     #dc.work()
     
     file_data_list = DataStructure.DataList()
-    fn = FilePatrolman('/var/www',r'\S+\.php|\S+\.inc|\S+\.php5',file_data_list)
+    fn = FilePatrol('/var/www',r'\S+\.php|\S+\.inc|\S+\.php5',file_data_list)
     fn.work()

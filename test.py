@@ -1,3 +1,4 @@
+#encoding:utf-8
 import judge
 import DataStructure
 import patrol
@@ -33,7 +34,7 @@ if __name__ == '__main__':
     file_patrol = patrol.FilePatrol('/var/www',r'(\S+\.php)|(\S+\.inc)|(\S+\.php5)|(\S+\.jsp)',file_list)
     package_judge = judge.PackageJudge(package_list, alarm_list)
     file_judge = judge.FileJudge(file_list, alarm_list)
-    execution = executioner.Executioner(alarm_list, "wlan0", 20)
+    execution = executioner.Executioner(alarm_list, "wlan0", 20, "/home/qero/毕设/attack_vertor/")
     
     package_patrol_thread = WorkerThread(package_patrol)
     file_patrol_thread = WorkerThread(file_patrol)
