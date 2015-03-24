@@ -20,7 +20,7 @@ class PackagePatrol:
         net, mask = pcap.lookupnet(self.interface)
         sniffer.open_live(self.interface, 1600, 0, 100)
         sniffer.setfilter(self.package_filter, 0, 0)
-        exec '''print "Package Patrol ready!"'''
+        print "Package Patrol ready!"
 
         try:
             while True:
@@ -81,7 +81,7 @@ class FilePatrol():
         observer = Observer()
         observer.schedule(event_handler, self.path,recursive=True)
         observer.start()
-        exec '''print "File patrol ready!"'''
+        print "File patrol ready!"
         #try:
         #    while True:
         #        pass

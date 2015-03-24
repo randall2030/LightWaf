@@ -19,7 +19,7 @@ class PackageJudge:
         self.XSS_regex = re.compile(XSS_feature, re.I)
 
     def work(self):
-        exec '''print "Package judge ready!"'''
+        print "Package judge ready!"
         while True:
             data = self.data_list.dequeue()
             ct = PackageCheckingThread(data, self.alarm_list, self.SQLInjection_regex, self.XSS_regex)
@@ -71,7 +71,7 @@ class FileJudge():
     def work(self):
         php_suffix_regex = re.compile(r'''(\S+\.php)|(\S+\.inc)|(\S+\.php5)''', re.I)
         jsp_suffix_regex = re.compile(r'''\S+\.jsp''', re.I)
-        exec '''print "File judge ready!"'''
+        print "File judge ready!"
         while True:
             data = self.data_list.dequeue()
             if php_suffix_regex.search(data[3]):
